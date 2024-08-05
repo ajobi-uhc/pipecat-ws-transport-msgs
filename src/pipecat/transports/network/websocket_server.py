@@ -11,7 +11,7 @@ import wave
 from typing import Awaitable, Callable
 from pydantic.main import BaseModel
 
-from pipecat.frames.frames import AudioRawFrame, CancelFrame, EndFrame, StartFrame
+from pipecat.frames.frames import AudioRawFrame, CancelFrame, EndFrame, StartFrame, TransportMessageFrame
 from pipecat.processors.frame_processor import FrameProcessor
 from pipecat.serializers.base_serializer import FrameSerializer
 from pipecat.serializers.protobuf import ProtobufFrameSerializer
@@ -112,7 +112,6 @@ class WebsocketServerInputTransport(BaseInputTransport):
 
 
 class WebsocketServerOutputTransport(BaseOutputTransport):
-
     def __init__(self, params: WebsocketServerParams, **kwargs):
         super().__init__(params, **kwargs)
 
@@ -160,6 +159,13 @@ class WebsocketServerOutputTransport(BaseOutputTransport):
                 await self._websocket.send(proto)
 
             self._audio_buffer = self._audio_buffer[self._params.audio_frame_size:]
+    async def send_message(self, frame: TransportMessageFrame):
+        if not self._websocket:
+            return
+        print("Trying to send here")
+        proto = self._params.serializer.serialize(frame)
+        if proto:
+            await self._websocket.send(proto)
 
 
 class WebsocketServerTransport(BaseTransport):

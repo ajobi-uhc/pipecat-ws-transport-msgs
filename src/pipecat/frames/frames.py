@@ -188,7 +188,7 @@ class TTSSpeakFrame(DataFrame):
 
 @dataclass
 class TransportMessageFrame(DataFrame):
-    message: Any
+    message: str
 
     def __str__(self):
         return f"{self.name}(message: {self.message})"
