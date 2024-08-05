@@ -162,7 +162,6 @@ class WebsocketServerOutputTransport(BaseOutputTransport):
     async def send_message(self, frame: TransportMessageFrame):
         if not self._websocket:
             return
-        print("Trying to send here")
         proto = self._params.serializer.serialize(frame)
         if proto:
             await self._websocket.send(proto)
