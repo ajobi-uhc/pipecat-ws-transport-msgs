@@ -29,7 +29,6 @@ class ProtobufFrameSerializer(FrameSerializer):
 
     def serialize(self, frame: Frame) -> str | bytes | None:
         proto_frame = frame_protos.Frame()
-        print("What the hell is ", proto_frame)
         if type(frame) not in self.SERIALIZABLE_TYPES:
             raise ValueError(
                 f"Frame type {type(frame)} is not serializable. You may need to add it to ProtobufFrameSerializer.SERIALIZABLE_FIELDS.")
